@@ -1,0 +1,206 @@
+#+TITLE: Newbie friendly Emacs configuration file
+#+AUTHOR: rd
+
+* Package
+
+Package init, melpa as the alternative archive
+#+BEGIN_SRC emacs-lisp
+(require 'package)
+(setq package-enable-at-startup nil)
+(setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
+			 ("melpa" . "https://melpa.org/packages/")))
+(package-initialize)
+#+END_SRC
+
+Install & config done via use-package, bootstapped below
+#+BEGIN_SRC emacs-lisp
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+#+END_SRC
+
+* Gui cleanup
+
+Removes bloat in the interface
+#+BEGIN_SRC emacs-lisp
+(menu-bar-mode -1)
+(when (fboundp 'tool-bar-mode)
+  (tool-bar-mode -1))
+(when (fboundp 'scroll-bar-mode)
+  (scroll-bar-mode -1))
+(when (fboundp 'horizontal-scroll-bar-mode)
+  (horizontal-scroll-bar-mode -1))
+#+END_SRC
+
+* Storing
+
+Sets various variables for storing purposes
+#+BEGIN_SRC emacs-lisp
+(setq backup-directory-alist `(("." . ,(concat user-emacs-directory "backups"))))
+(setq custom-file (concat user-emacs-directory "custom.el"))
+#+END_SRC
+
+* Misc
+
+#+BEGIN_SRC emacs-lisp
+(fset 'yes-or-no-p 'y-or-n-p)
+(put 'dired-find-alternate-file 'disabled nil)
+(require 'cl)
+#+END_SRC 
+
+** Diminish
+Diminish for a clean modeline
+#+BEGIN_SRC emacs-lisp 
+(use-package diminish
+  :ensure t)
+#+END_SRC
+
+* Change default keymap
+
+C-s is mapped with helm-occur
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-x C-b") 'ibuffer)
+  (global-set-key (kbd "C-S-s") 'isearch-forward-regexp)
+  (global-set-key (kbd "C-r") 'isearch-backward-regexp)
+  (global-set-key (kbd "C-M-s") 'isearch-forward)
+  (global-set-key (kbd "C-M-r") 'isearch-backward)
+#+END_SRC
+* Helm
+
+The best shiet since oignon rings
+#+BEGIN_SRC emacs-lisp
+(use-package helm
+  :ensure t
+  :init (use-package helm-projectile :ensure t)
+  :bind (("M-x"       . helm-M-x)
+	 ("C-x C-f"   . helm-find-files)
+	 ("M-y"       . helm-show-kill-ring)
+	 ("C-x b"     . helm-mini)
+	 ("<XF86Reload>"     . helm-mini)
+	 ("C-h a"     . helm-apropos)
+	 ("C-s"       . helm-occur)
+	 ("C-c h"     . helm-command-prefix))
+  :config
+  (require 'helm-config)
+  (global-unset-key (kbd "C-x c"))
+  (helm-mode 1)
+  (setq helm-split-window-inside-p t
+	helm-autoresize-max-height 42
+	helm-autoresize-min-height 0
+	helm-move-to-line-cycle-in-source t
+	helm-ff-search-library-in-sexp t))
+#+END_SRC
+
+* Projectile
+
+For all your project management needs
+#+BEGIN_SRC emacs-lisp
+  (use-package projectile
+    :ensure t
+    :diminish
+    :init (projectile-mode)
+    :bind (("C-c p" . projectile-command-map)
+	   ("<f12>" . projectile-compile-project))
+    :config (setq projectile-completion-system 'helm))
+#+END_SRC
+* Magit
+
+Git wizardry
+#+BEGIN_SRC emacs-lisp
+(use-package magit
+  :ensure t
+  :bind ("C-x g" . magit-status))
+#+END_SRC
+* Avy
+
+You jump and shiet, will need remapping
+#+BEGIN_SRC emacs-lisp
+(use-package avy
+  :ensure t
+  :diminish
+  :bind (("C-j"   . avy-goto-word-1)
+	 ("C-S-j" . avy-goto-line)))
+#+END_SRC
+
+* Company
+
+Completion utilities
+#+BEGIN_SRC emacs-lisp
+(use-package company
+  :ensure t
+  :config
+  (global-company-mode t)
+  (setq company-tooltip-limit 20)
+  (setq company-idle-delay 0.2)
+  (setq company-minimum-prefix-length 2)
+  (setq company-backends (delete 'company-semantic company-backends)))
+#+END_SRC
+
+* Flycheck
+
+Syntax checking
+#+BEGIN_SRC emacs-lisp
+(use-package flycheck
+  :ensure t
+  :config (global-flycheck-mode t))
+#+END_SRC
+
+* Undo tree
+
+#+BEGIN_SRC emacs-lisp
+(use-package undo-tree
+  :ensure t
+  :diminish
+  :config
+  (global-undo-tree-mode)
+  (setq undo-tree-visualizer-timestamps t)
+  (setq undo-tree-visualizer-diff t))
+#+END_SRC
+
+* Guide key
+
+Because sometimes you want to discover stuff
+#+BEGIN_SRC emacs-lisp
+(use-package guide-key
+  :ensure t
+  :diminish
+  :config
+  (setq guide-key/guide-key-sequence '("C-x" "C-c" "C-h")
+	guide-key/idle-delay 0.4
+	guide-key/recursive-key-sequence-flag t
+	guide-key/popup-window-position 'right)
+  (guide-key-mode 1))
+#+END_SRC
+
+* Ace window
+#+BEGIN_SRC emacs-lisp
+  (use-package ace-window
+    :ensure t
+    :bind ("C-x o" . ace-window)
+    :config
+    (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
+#+END_SRC
+
+* Eshell
+** Quickswitch
+Assumes a *eshell* buffer is always existing
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-$") (lambda ()
+				(interactive)
+				(if (equal (buffer-name) "*eshell*")
+				    (mode-line-other-buffer)
+				  (switch-to-buffer "*eshell*"))))
+  (add-hook 'eshell-mode-hook
+	    (lambda ()
+	      (smartparens-strict-mode t)
+	      (eshell-cmpl-initialize)
+	      (setenv "NODE_PATH" "/usr/lib/node_modules")
+	      (define-key eshell-mode-map [remap eshell-pcomplete] 'helm-esh-pcomplete)
+	      (define-key eshell-mode-map (kbd "M-p") 'helm-eshell-history)))
+  (setq helm-show-completion-display-function #'helm-show-completion-default-display-function)
+  (add-hook 'emacs-startup-hook
+	    (lambda ()
+	      (let ((default-directory (getenv "HOME")))
+		(command-execute 'eshell)
+		(bury-buffer))))
+#+END_SRC
