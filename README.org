@@ -1,0 +1,24 @@
+* Introduction
+You may have heard about the flame war opposing vim and emacs for the best text editor spot.
+It could even happen that you've seen some weird bearded guy frantically typing away on some archaic interface.
+Some of you may have attempted to launch one of those legendary programs, just to find that you don't know how to exit them.
+** What about Emacs
+Emacs, contrary to poplar belief is not exactly a text editor;
+It would be more appropriate to talk about a [[https://www.gnu.org/software/emacs/manual/eintr.html][elisp]] interpreter with some text management facilities.
+This state of affairs makes Emacs one of the most heavilly customizable IDE, the counterpart being the necessity to understand how it is used.
+** Should I try it ?
+This configuration is aimed to improve new Emacs users' first approach. However, you'll still have to learn the editor itself.
+If you never tried Emacs it won't be easy the first week, then you'll be able to edit normally and find what you need with apropos.
+
+* Packages
+The package configuration is stored in config.org (internal note-taking file format), which is then converted into an elisp file by init.el.
+Management of the different packages is made by [[https://github.com/jwiegley/use-package][use-package]].
+** Helm
+Helm will be your main interface to move around your filesystem : you no longer need cd and ls.
+One of the most common operation is :
+
+"C-x C-f" helm-find-files
+Navigate using the helm minibuffer.
+When you find the desired file, enter to open the file or "M-e" to open an eshell at cursor.
+
+
