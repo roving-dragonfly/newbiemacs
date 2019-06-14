@@ -13,10 +13,35 @@ If you never tried Emacs it won't be easy the first week, then you'll be able to
 Emacs has a tutorial, which you can invoke with "C-h t", you'll be able to learn basic movement and edition commands.
 You can discover more with "C-c h a" : helm-apropos and "M-x" : helm-M-x.
 *** Ressources
-[[https://www.gnu.org/software/emacs/tour/][Emacs Guided Tour]]
-[[https://david.rothlis.net/emacs/howtolearn.html][How to learn Emacs]]
-[[https://www.gnu.org/software/emacs/refcards/pdf/refcard.pdf][Emacs Reference Card]]
-[[https://www.emacswiki.org/emacs/LearningEmacs][Learning Emacs]]
+**** [[https://www.gnu.org/software/emacs/tour/][Emacs Guided Tour]]
+**** [[https://david.rothlis.net/emacs/howtolearn.html][How to learn Emacs]]
+**** [[https://www.gnu.org/software/emacs/refcards/pdf/refcard.pdf][Emacs Reference Card]]
+**** [[https://www.emacswiki.org/emacs/LearningEmacs][Learning Emacs]]
+* Useful infos
+** Using a up to date version
+Default emacs at 42 is seriously outdated, I highly suggest you to install a recent version either by using [[https://brew.sh/][brew]] or downloading the [[https://emacsformacosx.com/][binary]].
+** Command syntax
+Emacs command are often composed of a modifier key and a letter, "C-letter" is Control, "M-letter" is Meta (Alt or Esc).
+You can also combine them, for example "C-M-s" is Control-Meta-s.
+** Linter
+In order for Company and Flycheck to work properly you have to indicate the location of your header files for the current project.
+In your project's root, create a file named .dir-locals.el. It will contain the path to our include folder.
+#+BEGIN_SRC emacs-lisp
+((c-mode . ((company-clang-arguments . ("-I/Path/to/include/folder1/."
+					"-I/Path/to/include/folder2/."))))
+ (c-mode . ((flycheck-clang-include-path . ("/Path/to/include/folder1/."
+					"/Path/to/include/folder2/.")))))
+#+END_SRC
+** Helm is powerful
+When in a helm buffer try tabbing, it will display all possible actions for your selection. 
+If you want to search into a file, "C-s" when the cursor is on the filename.
+Deletion is similarly done using "M-D"
+Manual fuzzy searching "C-c h m"
+Use guide-key to explore the potential actions with "C-c h"
+** [[https://www.emacswiki.org/emacs/EmacsAsDaemon][Deamonize]]
+You should not launch an emacs instance every time you want to use it, this is especially important when you have a lot of packages to load at startup.
+** Eshell
+Emacs posses a shell, [[https://www.gnu.org/software/emacs/manual/html_mono/eshell.html][eshell]] ("M-x" eshell), you can switch to it with "C-$", pressing it again switches back.
 * Packages
 The package configuration is stored in config.org (internal note-taking file format), which is then converted into an elisp file by init.el.
 Management of the different packages is made by [[https://github.com/jwiegley/use-package][use-package]].
@@ -47,15 +72,9 @@ To configure it see  <link to dir-locals>
 [[https://github.com/kai2nenobu/guide-key][Guide-key]] show possible command completion.
 ** Ace window
 [[https://github.com/abo-abo/ace-window][Ace-window]] improves the other-window function by adding a selection step when there is more than 2 windows.
-
-* Useful infos
-** Linter
-In order for Company and Flycheck to work properly you have to indicate the location of your header files for the current project.
-In your project's root, create a file named .dir-locals.el. It will contain the path to our include folder.
-#+BEGIN_SRC emacs-lisp
-((c-mode . ((company-clang-arguments . ("-I/Path/to/include/folder1/."
-					"-I/Path/to/include/folder2/."))))
- (c-mode . ((flycheck-clang-include-path . ("/Path/to/include/folder1/."
-					"/Path/to/include/folder2/.")))))
-#+END_SRC
 * Going beyond
+** Orgmode
+[[https://orgmode.org/manual/index.html][Orgmode]] is the way to go if you're into notetaking, time management, litterate programming...
+This file is a orgmode file, github can handle it's syntax.
+A lot of orgmode users wrote about the greatness of orgmode for various applications.
+I will now assume for this section that you know how to use the internet to find what you need.
