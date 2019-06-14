@@ -4,21 +4,58 @@ It could even happen that you've seen some weird bearded guy frantically typing 
 Some of you may have attempted to launch one of those legendary programs, just to find that you don't know how to exit them.
 ** What about Emacs
 Emacs, contrary to poplar belief is not exactly a text editor;
-It would be more appropriate to talk about a [[https://www.gnu.org/software/emacs/manual/eintr.html][elisp]] interpreter with some text management facilities.
+It would be more appropriate to talk about an [[https://www.gnu.org/software/emacs/manual/eintr.html][elisp]] interpreter with some text management facilities.
 This state of affairs makes Emacs one of the most heavilly customizable IDE, the counterpart being the necessity to understand how it is used.
 ** Should I try it ?
 This configuration is aimed to improve new Emacs users' first approach. However, you'll still have to learn the editor itself.
 If you never tried Emacs it won't be easy the first week, then you'll be able to edit normally and find what you need with apropos.
-
+** Where to start
+Emacs has a tutorial, which you can invoke with "C-h t", you'll be able to learn basic movement and edition commands.
+You can discover more with "C-c h a" : helm-apropos and "M-x" : helm-M-x.
+*** Ressources
+[[https://www.gnu.org/software/emacs/tour/][Emacs Guided Tour]]
+[[https://david.rothlis.net/emacs/howtolearn.html][How to learn Emacs]]
+[[https://www.gnu.org/software/emacs/refcards/pdf/refcard.pdf][Emacs Reference Card]]
+[[https://www.emacswiki.org/emacs/LearningEmacs][Learning Emacs]]
 * Packages
 The package configuration is stored in config.org (internal note-taking file format), which is then converted into an elisp file by init.el.
 Management of the different packages is made by [[https://github.com/jwiegley/use-package][use-package]].
 ** Helm
-Helm will be your main interface to move around your filesystem : you no longer need cd and ls.
+[[https://github.com/emacs-helm/helm][Helm]] will be your main interface to move around your filesystem : you no longer need cd and ls.
 One of the most common operation is :
-
 "C-x C-f" helm-find-files
 Navigate using the helm minibuffer.
 When you find the desired file, enter to open the file or "M-e" to open an eshell at cursor.
+** Projectile
+Projectile is a project management package, you can explore it's functionalities with "C-c p", [[https://github.com/kai2nenobu/guide-key][guide-key]] will show all possible completions.
+** Magit
+[[https://magit.vc/][Magit]] is the most popular git interface for Emacs, and every other editors.
+Invoke it with "C-x g", stage with "s", commit with "c", push with "P".
+You get the power of cli git with [[https://github.com/abo-abo/hydra][hydra]]-like shortcuts, I highly suggest that you learn to use it.
+** Avy
+[[https://github.com/abo-abo/avy][Avy]] is a navigation packaege, working similarly to [[https://github.com/philc/vimium][vimium]]. Call it with "C-j" and the fisrst letter of the targeted word.
+You'll be prompted with the shortcuts for all matching targets, simply type it to jump there.
+** Company
+[[https://github.com/company-mode/company-mode][Company]] is a completion framework, after typing 2 characters you'll promted with potentials completions.
+This can be improved, see <link to dir-locals>
+** Flycheck
+[[https://github.com/flycheck/flycheck][Flycheck]] is a syntax checking package, it will highlight detectable mistakes in your code.
+To configure it see  <link to dir-locals>
+** Undo tree
+[[https://elpa.gnu.org/packages/undo-tree.html][Undo-tree]] allow non-linear undo operations, simply "C-c u" and navigate your undo history, "q" when you're done.
+** Guide key
+[[https://github.com/kai2nenobu/guide-key][Guide-key]] show possible command completion.
+** Ace window
+[[https://github.com/abo-abo/ace-window][Ace-window]] improves the other-window function by adding a selection step when there is more than 2 windows.
 
-
+* Useful infos
+** Linter
+In order for Company and Flycheck to work properly you have to indicate the location of your header files for the current project.
+In your project's root, create a file named .dir-locals.el. It will contain the path to our include folder.
+#+BEGIN_SRC emacs-lisp
+((c-mode . ((company-clang-arguments . ("-I/Path/to/include/folder1/."
+					"-I/Path/to/include/folder2/."))))
+ (c-mode . ((flycheck-clang-include-path . ("/Path/to/include/folder1/."
+					"/Path/to/include/folder2/.")))))
+#+END_SRC
+* Going beyond
