@@ -17,6 +17,9 @@ You can discover more with "C-c h a" : helm-apropos and "M-x" : helm-M-x.
 **** [[https://david.rothlis.net/emacs/howtolearn.html][How to learn Emacs]]
 **** [[https://www.gnu.org/software/emacs/refcards/pdf/refcard.pdf][Emacs Reference Card]]
 **** [[https://www.emacswiki.org/emacs/LearningEmacs][Learning Emacs]]
+** How to use it at 42
+Emacs can be configured in [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Init-File.html][numerous]] ways, this one uses the .emacs.d directory structure.
+However your home will contain a .emacs by default, it's goal is to load the 42 header and some C formating stuff.
 * Useful infos
 ** Using a up to date version
 Default emacs at 42 is seriously outdated, I highly suggest you to install a recent version either by using [[https://brew.sh/][brew]] or downloading the [[https://emacsformacosx.com/][binary]].
@@ -67,7 +70,7 @@ This can be improved, see <link to dir-locals>
 [[https://github.com/flycheck/flycheck][Flycheck]] is a syntax checking package, it will highlight detectable mistakes in your code.
 To configure it see  <link to dir-locals>
 ** Undo tree
-[[https://elpa.gnu.org/packages/undo-tree.html][Undo-tree]] allow non-linear undo operations, simply "C-c u" and navigate your undo history, "q" when you're done.
+[[https://elpa.gnu.org/packages/undo-tree.html][Undo-tree]] allows for non-linear undo operations, simply "C-c u" and navigate your undo history, "q" when you're done.
 ** Guide key
 [[https://github.com/kai2nenobu/guide-key][Guide-key]] show possible command completion.
 ** Ace window
@@ -78,3 +81,5 @@ To configure it see  <link to dir-locals>
 This file is a orgmode file, github can handle it's syntax.
 A lot of orgmode users wrote about the greatness of orgmode for various applications.
 I will now assume for this section that you know how to use the internet to find what you need.
+** Various workflows
+[[http://emacs-bootstrap.com/][Emacs bootstrap]]
