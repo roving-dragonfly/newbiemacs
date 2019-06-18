@@ -20,6 +20,21 @@ You can discover more with "C-c h a" : helm-apropos and "M-x" : helm-M-x.
 ** How to use it at 42
 Emacs can be configured in [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Init-File.html][numerous]] ways, this one uses the .emacs.d directory structure.
 However your home will contain a .emacs by default, it's goal is to load the 42 header and some C formating stuff.
+First you need to clone the repository as .emacs.d, then load it from your .emacs, allowing you to keep both configs.
+#+BEGIN_SRC bash
+git clone https://github.com/roving-dragonfly/newbiemacs .emacs.d
+#+END_SRC
+In ~/.emacs, find the following line :
+#+BEGIN_SRC emacs-lisp
+; Load user configuration
+(if (file-exists-p "~/.myemacs") (load-file "~/.myemacs"))
+#+END_SRC
+You'll have to replace it with :
+#+BEGIN_SRC emacs-lisp
+; Load user configuration
+(if (file-exists-p "~/.emacs.d/init.el") (load-file "~/.emacs.d/init.el"))
+#+END_SRC
+Reboot your emacs, wait for the download of your packages and have fun.
 * Useful infos
 ** Using a up to date version
 Default emacs at 42 is seriously outdated, I highly suggest you to install a recent version either by using [[https://brew.sh/][brew]] or downloading the [[https://emacsformacosx.com/][binary]].
@@ -45,6 +60,19 @@ Use guide-key to explore the potential actions with "C-c h"
 You should not launch an emacs instance every time you want to use it, this is especially important when you have a lot of packages to load at startup.
 ** Eshell
 Emacs posses a shell, [[https://www.gnu.org/software/emacs/manual/html_mono/eshell.html][eshell]] ("M-x" eshell), you can switch to it with "C-$", pressing it again switches back.
+** Updates
+Updates in Emacs are not automatic, unless you tell it to do so...
+The most intuitive way to update all your packages, is "M-x" list-packages. When the list is loaded, press "U" then "x".
+** Path on osx
+This operating system can sometimes be a litte capricious, some can say a lot considering it's price, in order for eshell to get your $PATH add this to your config file.
+#+BEGIN_SRC emacs-lisp
+(use-package exec-path-from-shell
+  :ensure t
+  :config
+  (exec-path-from-shell-initialize)
+  (exec-path-from-shell-copy-envs
+   '("PATH")))
+#+END_SRC
 * Packages
 The package configuration is stored in config.org (internal note-taking file format), which is then converted into an elisp file by init.el.
 Management of the different packages is made by [[https://github.com/jwiegley/use-package][use-package]].
